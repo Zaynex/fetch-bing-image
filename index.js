@@ -11,12 +11,9 @@ app.use(async ctx => {
         const image = document.querySelector(IMAGE_SOURCE_TAG);
         const imageSourceWithURL = image.style.backgroundImage;
         const imageSource = imageSourceWithURL.slice(5, -2);
-        return {
-            imageSource
-        }
+        return imageSource
     })
-    // await page.screenshot({path: 'demo.png'});
     await broswer.close();
-    ctx.response.body = imageSource
+    ctx.response.body = `@ChiaWei  Lau 今日 Bing 图片地址: ${imageSource}`
 });
 app.listen(3000);
