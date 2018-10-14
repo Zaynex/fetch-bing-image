@@ -3,7 +3,7 @@ const app = new Koa();
 const puppeteer = require('puppeteer');
 
 app.use(async ctx => {
-    const broswer = await puppeteer.launch();
+    const broswer = await puppeteer.launch({args: ['--no-sandbox']});
     const page = await broswer.newPage();
     await page.goto('https://cn.bing.com/');
     const imageSource = await page.evaluate(() => {
