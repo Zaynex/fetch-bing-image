@@ -15,6 +15,7 @@ router.get("/api/bing", async (ctx, next) => {
   const page = await broswer.newPage();
   await page.goto("https://cn.bing.com/");
   const result = await page.$eval('#bgDiv', el => getComputedStyle(el).backgroundImage);
+  await broswer.close();
   ctx.body = result;
 });
 app.use(router.routes());
