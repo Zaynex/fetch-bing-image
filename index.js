@@ -7,10 +7,21 @@ const static = require("koa-static");
 const Router = require("koa-router");
 const staticPath = "./static";
 const router = new Router();
+const getDate = require('./common/util').getDate;
+const conditional = require('koa-conditional-get');
+const etag = require('koa-etag');
 
+app.use(conditional());
+app.use(etag());
 router.get("/api/bing", async (ctx, next) => {
-  // ctx.router available
-
+  if(ctx.request.headers['if-none-match'] == getDate()) {
+    ctx.status = 304;
+    next();
+    return;
+  }
+  ctx.set({
+      'ETag': getDate(),
+  })
   const broswer = await puppeteer.launch({args: ['--no-sandbox']});
   const page = await broswer.newPage();
   await page.goto("https://cn.bing.com/");
@@ -20,6 +31,5 @@ router.get("/api/bing", async (ctx, next) => {
 });
 app.use(router.routes());
 app.use(bodyParser());
-
 app.use(static(path.join(__dirname, staticPath)));
 app.listen(3000);
